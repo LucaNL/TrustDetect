@@ -104,49 +104,45 @@ function collectBasicInfo() {
 
 async function getLocationData() {
   try {
-    const apiUrl = `http://ip-api.com/json/?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,offset,currency,isp,org,as,asname,reverse,mobile,proxy,hosting,query`;
+    const ipv4Response = await fetch("https://api.ipify.org?format=json");
+    const ipv4Data = await ipv4Response.json();
+    document.getElementById("ipv4-address").textContent =
+      ipv4Data.ip || "Not available";
 
+    try {
+      const ipv6Response = await fetch("https://api64.ipify.org?format=json");
+      const ipv6Data = await ipv6Response.json();
+
+      if (ipv6Data.ip && ipv6Data.ip.includes(":")) {
+        document.getElementById("ipv6-address").textContent = ipv6Data.ip;
+      } else {
+        document.getElementById("ipv6-address").textContent = "Not available";
+      }
+    } catch (ipv6Error) {
+      console.log("IPv6 fetch error:", ipv6Error.message);
+      document.getElementById("ipv6-address").textContent = "Not available";
+    }
+
+    const apiUrl = `https://free.freeipapi.com/api/json/`;
     const response = await fetch(apiUrl);
     const data = await response.json();
 
-    if (data.status === "success") {
-      document.getElementById("ipv4-address").textContent =
-        data.query || "Not available";
-
-      try {
-        const ipv6Response = await fetch("https://api64.ipify.org?format=json");
-        const ipv6Data = await ipv6Response.json();
-
-        if (ipv6Data.ip && ipv6Data.ip.includes(":")) {
-          document.getElementById("ipv6-address").textContent = ipv6Data.ip;
-        } else {
-          document.getElementById("ipv6-address").textContent = "Not available";
-        }
-      } catch (ipv6Error) {
-        console.log("IPv6 fetch error:", ipv6Error.message);
-        document.getElementById("ipv6-address").textContent = "Not available";
-      }
-
+    if (data.ipAddress || data.countryName) {
       document.getElementById("country").textContent =
-        data.country || "Not available";
+        data.countryName || "Not available";
       document.getElementById("region").textContent =
         data.regionName || "Not available";
       document.getElementById("city").textContent =
-        data.city || "Not available";
-      document.getElementById("isp").textContent = data.isp || "Not available";
+        data.cityName || "Not available";
+      document.getElementById("isp").textContent =
+        data.internetServiceProvider || "Not available";
 
       let vpnStatus = "Direct Connection";
       let vpnStatusClass = "status-active";
 
-      if (data.proxy === true) {
+      if (data.isProxy === true) {
         vpnStatus = "Proxy Detected";
         vpnStatusClass = "status-danger";
-      } else if (data.hosting === true) {
-        vpnStatus = "Hosting/VPS Server";
-        vpnStatusClass = "status-warning";
-      } else if (data.mobile === true) {
-        vpnStatus = "Mobile Connection";
-        vpnStatusClass = "status-active";
       } else {
         const vpnIndicators = [
           "VPN",
@@ -157,7 +153,7 @@ async function getLocationData() {
           "DATACENTER",
           "CLOUD",
         ];
-        const orgText = (data.org || data.isp || "").toUpperCase();
+        const orgText = (data.internetServiceProvider || "").toUpperCase();
         const isVpnByName = vpnIndicators.some((indicator) =>
           orgText.includes(indicator)
         );
@@ -172,7 +168,7 @@ async function getLocationData() {
         "vpn-detection"
       ).innerHTML = `${vpnStatus} <span class="status-indicator ${vpnStatusClass}"></span>`;
     } else {
-      throw new Error(data.message || "API request failed");
+      throw new Error("API request failed");
     }
   } catch (error) {
     console.error("Error fetching location data:", error);
