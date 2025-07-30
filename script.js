@@ -104,23 +104,27 @@ function collectBasicInfo() {
 
 async function getLocationData() {
   try {
-    const response = await fetch("/api/location");
+    const apiUrl = `http://ip-api.com/json/?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,offset,currency,isp,org,as,asname,reverse,mobile,proxy,hosting,query`;
+
+    const response = await fetch(apiUrl);
     const data = await response.json();
 
     if (data.status === "success") {
       document.getElementById("ipv4-address").textContent =
         data.query || "Not available";
 
-      // Check if IPv6 data is available from server
-      if (data.ipv6) {
-        document.getElementById("ipv6-address").textContent = data.ipv6;
-      } else {
-        if (data.query && data.query.includes(":")) {
-          document.getElementById("ipv6-address").textContent = data.query;
-          document.getElementById("ipv4-address").textContent = "Not available";
+      try {
+        const ipv6Response = await fetch("https://api64.ipify.org?format=json");
+        const ipv6Data = await ipv6Response.json();
+
+        if (ipv6Data.ip && ipv6Data.ip.includes(":")) {
+          document.getElementById("ipv6-address").textContent = ipv6Data.ip;
         } else {
           document.getElementById("ipv6-address").textContent = "Not available";
         }
+      } catch (ipv6Error) {
+        console.log("IPv6 fetch error:", ipv6Error.message);
+        document.getElementById("ipv6-address").textContent = "Not available";
       }
 
       document.getElementById("country").textContent =
