@@ -2,7 +2,7 @@
 
 A comprehensive web application that demonstrates the types of data collected by fraud detection systems like Trustpilot. This tool shows you exactly what information about your device, behavior, and network connection is being gathered when you visit websites that use automated fraud detection.
 
-**🔗 GitHub Repository**: [https://github.com/LucaNL/TrustDetect](https://github.com/LucaNL/TrustDetect)
+**🌐 Live Website**: [https://lucanl.github.io/TrustDetect/](https://lucanl.github.io/TrustDetect/)  
 
 ## Features
 
