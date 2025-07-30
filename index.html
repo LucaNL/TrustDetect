@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="LucaNL" />
+    <meta
+      name="description"
+      content="TrustDetect - Privacy education tool showing data collected by fraud detection systems like Trustpilot"
+    />
+    <meta
+      name="keywords"
+      content="privacy, fraud detection, trustpilot, data collection, fingerprinting"
+    />
+    <title>TrustDetect - Your Data Profile</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1><i class="fas fa-shield-alt"></i> TrustDetect</h1>
+        <p>
+          Your Data Profile - As Seen by Trustpilot's Fraud Detection System
+        </p>
+      </div>
+
+      <div class="warning-banner">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>Privacy Notice:</strong> This tool shows you the types of data
+        that Trustpilot collects for fraud detection. All data displayed is from
+        your current browser session and is not stored or transmitted anywhere.
+      </div>
+
+      <div class="data-card" style="margin-bottom: 30px">
+        <div class="card-header">
+          <i class="fas fa-edit card-icon"></i>
+          <div>
+            <h3 class="card-title">Review Analysis</h3>
+            <div class="usage-level usage-critical">
+              Critical Usage - Primary fraud detection
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom: 20px">
+          <label
+            for="review-text"
+            style="
+              display: block;
+              margin-bottom: 10px;
+              color: #b0b0b0;
+              font-weight: 500;
+            "
+          >
+            Type a review to analyze typing patterns:
+            <span
+              class="tooltip-icon"
+              data-tooltip="Typing patterns, speed, and pauses help detect copied reviews vs. authentic hand-typed reviews. Bots and fraudsters often copy-paste content."
+              >?</span
+            >
+          </label>
+          <textarea
+            id="review-text"
+            placeholder="Start typing your review here..."
+            style="
+              width: 100%;
+              min-height: 120px;
+              padding: 15px;
+              background: #1a1a2e;
+              border: 2px solid #3a3a5c;
+              border-radius: 8px;
+              color: #e0e0e0;
+              font-size: 14px;
+              font-family: inherit;
+              resize: vertical;
+            "
+          ></textarea>
+        </div>
+        <div class="data-item">
+          <span class="data-label">
+            Words Typed
+            <span
+              class="tooltip-icon"
+              data-tooltip="Total number of words in your review - helps detect short spam reviews"
+              >?</span
+            >
+          </span>
+          <span class="data-value" id="word-count">0</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">
+            Typing Speed (WPM)
+            <span
+              class="tooltip-icon"
+              data-tooltip="Words per minute - unusually fast speeds may indicate copy-pasting or automation"
+              >?</span
+            >
+          </span>
+          <span class="data-value" id="typing-speed">0</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">
+            Pause Patterns
+            <span
+              class="tooltip-icon"
+              data-tooltip="Natural typing has pauses for thinking - consistent speeds suggest copied content"
+              >?</span
+            >
+          </span>
+          <span class="data-value" id="pause-patterns">Natural</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">
+            Copy/Paste Detected
+            <span
+              class="tooltip-icon"
+              data-tooltip="Detects if text was pasted rather than typed - major fraud indicator"
+              >?</span
+            >
+          </span>
+          <span class="data-value" id="copy-paste-detected">No</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">
+            Review Authenticity
+            <span
+              class="tooltip-icon"
+              data-tooltip="Overall assessment based on typing patterns, speed, and behavior analysis"
+              >?</span
+            >
+          </span>
+          <span class="data-value" id="review-authenticity">Analyzing...</span>
+        </div>
+      </div>
+
+      <div class="data-grid">
+        <div class="data-card">
+          <div class="card-header">
+            <i class="fas fa-desktop card-icon"></i>
+            <div>
+              <h3 class="card-title">Device & Browser Data</h3>
+              <div class="usage-level usage-high">
+                High Usage - Core fraud detection
+              </div>
+            </div>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              IPv4 Address
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your public IPv4 internet address used to identify your location and detect VPN/proxy usage"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="ipv4-address">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              IPv6 Address
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your public IPv6 internet address - newer protocol that can also reveal location and proxy usage"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="ipv6-address">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              User Agent
+              <span
+                class="tooltip-icon"
+                data-tooltip="Browser and operating system information that can identify your device type and detect automation"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="user-agent">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Browser Language
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your browser's language setting used to detect inconsistencies with location data"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="browser-language">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Screen Resolution
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your screen size and color depth used for device fingerprinting and bot detection"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="screen-resolution">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Timezone
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your system timezone used to verify consistency with IP location data"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="timezone">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Platform
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your operating system platform used for device identification and consistency checks"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="platform">Loading...</span>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="card-header">
+            <i class="fas fa-map-marker-alt card-icon"></i>
+            <div>
+              <h3 class="card-title">Location Data</h3>
+              <div class="usage-level usage-critical">
+                Critical - Primary fraud indicator
+              </div>
+            </div>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Country
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your country based on IP address - used to detect suspicious location patterns"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="country">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Region
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your state/region for more precise location tracking and fraud pattern analysis"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="region">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              City
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your city location used to detect rapid location changes indicating fraud"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="city">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              ISP
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your Internet Service Provider - used to identify VPNs, proxies, and hosting services"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="isp">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              GPS Coordinates
+              <span
+                class="tooltip-icon"
+                data-tooltip="Precise location from your device GPS - click to allow and compare with IP location"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="coordinates"
+              >Click to get location</span
+            >
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="card-header">
+            <i class="fas fa-chart-line card-icon"></i>
+            <div>
+              <h3 class="card-title">Session & Behavior</h3>
+              <div class="usage-level usage-medium">
+                Medium Usage - Review writing patterns
+              </div>
+            </div>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Session Start
+              <span
+                class="tooltip-icon"
+                data-tooltip="When you started browsing - used to calculate session duration and behavior patterns"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="session-start">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Page Load Time
+              <span
+                class="tooltip-icon"
+                data-tooltip="How fast the page loaded - unusually fast times may indicate automated browsing"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="page-load-time">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Mouse Movements
+              <span
+                class="tooltip-icon"
+                data-tooltip="Number of mouse movements - helps detect human vs automated behavior"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="mouse-movements">0</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Clicks
+              <span
+                class="tooltip-icon"
+                data-tooltip="Number of clicks - rapid or no clicking patterns can indicate bots"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="clicks">0</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Scroll Events
+              <span
+                class="tooltip-icon"
+                data-tooltip="Scrolling behavior - natural scrolling patterns differ from automated scripts"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="scroll-events">0</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Keyboard Events
+              <span
+                class="tooltip-icon"
+                data-tooltip="Typing patterns - helps detect copy/paste vs natural typing in reviews"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="keyboard-events">0</span>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="card-header">
+            <i class="fas fa-network-wired card-icon"></i>
+            <div>
+              <h3 class="card-title">Network & Security</h3>
+              <div class="usage-level usage-high">
+                High Usage - VPN/Proxy detection
+              </div>
+            </div>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Connection Type
+              <span
+                class="tooltip-icon"
+                data-tooltip="Your internet connection type and speed - helps identify mobile vs desktop users"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="connection-type">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Do Not Track
+              <span
+                class="tooltip-icon"
+                data-tooltip="Browser privacy setting - indicates privacy consciousness and browser configuration"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="do-not-track">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Cookies Enabled
+              <span
+                class="tooltip-icon"
+                data-tooltip="Whether cookies work - disabled cookies may indicate privacy tools or unusual browser setup"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="cookies-enabled">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Local Storage
+              <span
+                class="tooltip-icon"
+                data-tooltip="Browser storage capability - used for tracking and detecting privacy-blocking tools"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="local-storage">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              WebRTC Support
+              <span
+                class="tooltip-icon"
+                data-tooltip="Real-time communication support - can reveal actual IP even through VPNs"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="webrtc-support">Loading...</span>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="card-header">
+            <i class="fas fa-fingerprint card-icon"></i>
+            <div>
+              <h3 class="card-title">Device Fingerprinting</h3>
+              <div class="usage-level usage-critical">
+                Critical - Device uniqueness tracking
+              </div>
+            </div>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Canvas Fingerprint
+              <span
+                class="tooltip-icon"
+                data-tooltip="Unique identifier based on how your graphics card renders text - nearly impossible to fake"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="canvas-fingerprint">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              WebGL Fingerprint
+              <span
+                class="tooltip-icon"
+                data-tooltip="Graphics hardware signature - uniquely identifies your graphics card and drivers"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="webgl-fingerprint">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Audio Fingerprint
+              <span
+                class="tooltip-icon"
+                data-tooltip="Audio hardware signature - different devices produce unique audio processing patterns"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="audio-fingerprint">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Font List Hash
+              <span
+                class="tooltip-icon"
+                data-tooltip="Unique identifier based on installed fonts - reveals OS type and installed software"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="font-hash">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Plugin List Hash
+              <span
+                class="tooltip-icon"
+                data-tooltip="Browser plugins signature - identifies installed browser extensions and plugins"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="plugin-hash">Loading...</span>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="card-header">
+            <i class="fas fa-exclamation-triangle card-icon"></i>
+            <div>
+              <h3 class="card-title">Risk Assessment</h3>
+              <div class="usage-level usage-critical">
+                Critical - Final fraud score
+              </div>
+            </div>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Suspicious Patterns
+              <span
+                class="tooltip-icon"
+                data-tooltip="Detected behavioral anomalies like rapid clicking, no mouse movement, or bot-like patterns"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="suspicious-patterns"
+              >None detected <span class="status-indicator status-active"></span
+            ></span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Bot Detection Score
+              <span
+                class="tooltip-icon"
+                data-tooltip="Overall assessment of whether behavior appears human or automated based on interaction patterns"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="bot-score"
+              >Low Risk <span class="status-indicator status-active"></span
+            ></span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              VPN/Proxy Detection
+              <span
+                class="tooltip-icon"
+                data-tooltip="Detection of anonymization tools that may indicate fraudulent activity or location spoofing"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="vpn-detection">Loading...</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">
+              Device Trust Level
+              <span
+                class="tooltip-icon"
+                data-tooltip="Overall trustworthiness score based on device consistency, fingerprinting, and behavior analysis"
+                >?</span
+              >
+            </span>
+            <span class="data-value" id="trust-level"
+              >High <span class="status-indicator status-active"></span
+            ></span>
+          </div>
+        </div>
+      </div>
+
+      <button class="refresh-btn" onclick="refreshData()">
+        <i class="fas fa-sync-alt"></i> Refresh Data
+      </button>
+
+      <div class="footer">
+        <p>
+          <i class="fas fa-info-circle"></i> This tool demonstrates the types of
+          data collected by platforms like Trustpilot for fraud detection
+          purposes.
+        </p>
+        <p>
+          Based on Trustpilot's Privacy Policy and industry-standard fraud
+          detection methods.
+        </p>
+        <p
+          style="
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #3a3a5c;
+          "
+        >
+          <i class="fas fa-user-shield"></i> Created by
+          <strong>LucaNL</strong> |
+          <a
+            href="https://github.com/LucaNL/TrustDetect"
+            target="_blank"
+            style="color: #64b5f6; text-decoration: none"
+          >
+            <i class="fab fa-github"></i> GitHub
+          </a>
+          | <i class="fas fa-code"></i> Open Source Privacy Education Tool
+        </p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
